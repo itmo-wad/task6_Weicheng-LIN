@@ -4,7 +4,7 @@ from markupsafe import escape
 
 app = Flask(__name__)
 
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.secret_key = b'\xd4\x87\\\x0eJ\x80\x9em=\r\x91d\x9b\xe3c'
 
 @app.route('/')
 @app.route('/index')
