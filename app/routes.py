@@ -15,11 +15,11 @@ key = b'\xd4\x87\\\x0eJ\x80\x9em=\r\x91d\x9b\xe3c'
 
 @app.route('/')
 def index():
-    if session['username']:
-        return render_template('index.html')
-    else:
+    if not session.get('username'):
         flash('You are not authenticated')
-    return redirect(url_for('login'))
+        return redirect(url_for('login'))
+    else:
+        return render_template('index.html')
 
 
 @app.route('/cabinet')
