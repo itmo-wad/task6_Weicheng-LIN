@@ -4,7 +4,7 @@ from markupsafe import escape
 
 from flask_pymongo import PyMongo
 
-from . forms import LoginForm
+from . forms import LoginForm, RegistrationForm
 
 from app import app
 
@@ -59,3 +59,12 @@ def login():
         session['username'] = True
         return redirect(url_for('index'))
     return render_template('login.html', form=form)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = form.username.data
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
