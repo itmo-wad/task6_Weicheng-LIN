@@ -1,9 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for
-
 from flask_pymongo import PyMongo
-
 from . forms import LoginForm, RegistrationForm
-
+from werkzeug.security import generate_password_hash, check_password_hash
 from app import app
 
 
@@ -25,7 +23,7 @@ def index():
 @app.route('/cabinet')
 def cabinet():
     if session['username']:
-        return redirect(url_for('cabinet'))
+        return render_template('cabinet.html')
     else:
         flash('You are not authenticated')
     return redirect(url_for('login'))
@@ -50,8 +48,9 @@ def login():
     form = LoginForm(request.form)
     if form.validate_on_submit():
         user = form.username.data
+        password = form.password.data
         login_user = mongo.db.users.find_one({'username':user})
-        if login_user is None:
+        if login_user is None or not check_password_hash(login_user['password'], password):
             flash('Invalid username or password')
             return redirect(url_for('login'))
         session['username'] = True
@@ -63,6 +62,16 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = form.username.data
+        password = generate_password_hash(form.password.data)
+        mongo.db.users.insert({'username':user, 'password':password})
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
+    else:
+        flash('Wrong')
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    session['username'] = False
+    return redirect(url_for('login'))
