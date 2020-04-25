@@ -1,7 +1,5 @@
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for
 
-from markupsafe import escape
-
 from flask_pymongo import PyMongo
 
 from . forms import LoginForm, RegistrationForm
