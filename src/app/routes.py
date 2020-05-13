@@ -11,7 +11,7 @@ from app import app
 UPLOAD_FOLDER = "/Users/steven/Documents/WebDev/task_2/app/uploads/"
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
-app.config['MONGO_URI']="mongodb://localhost:27017/stevenDB"
+app.config['MONGO_URI']="mongodb://mongodb:27017/stevenDB"
 app.config['UPLOAD_FOLDER']= UPLOAD_FOLDER
 
 mongo = PyMongo(app)
@@ -76,7 +76,7 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     else:
-        flash('Wrong')
+        flash('Authentication first or wrong')
     return render_template('register.html', title='Register', form=form)
 
 @app.route('/logout')
